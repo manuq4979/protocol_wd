@@ -1,5 +1,11 @@
-from fuzzywuzzy import fuzz
+#from fuzzywuzzy import fuzz
 import os
+import profile_wd
+import raiting
+
+profile_wd.hello_user()
+
+PS1 = profile_wd.PS1
 
 code = ""
 code_text = ""
@@ -26,40 +32,81 @@ def remove_text(name_file):
     os.remove(name_file)
 
 
+def help():
+	print("\n")
+	print("quit 			   - выход.")
+	print("add code <code number_code> - текущий код задачи.")
+	print("ls code 			   - показать список активных задач.")
+	print("del <code_number> 	   - вводите номер кода и тот будет удален.")
+
+def code_view(text):
+	text = text[5:]
+	code_text_list = get_text("code_text.txt").split(",")
+	for code_text in code_text_list:
+		code_num = code_text[0:3]
+		code_num2 = text[0:3]
+
+		if(code_num == code_num2):
+			print(code_text)
+
+def add_code(text):
+	text = text.replace("add code", "") 
+	set_text("code_text.txt", text[1:]) 
+	print("code added complite!")
+
+
+def ls(text):
+	if(text == "code"):
+		code_list = get_text("code_text.txt").split(",") 
+		print(code_list)
+
+def del_code(text):
+	new_text = ""
+
+	text = text[4:]
+	code_text_list = get_text("code_text.txt").split(",")
+	for code_text in code_text_list:
+		code_num = code_text[:3]
+		code_num2 = text[:3]
+		if(code_num == code_num2):
+			print("Done!")
+		else:
+			new_text = new_text+","+code_text
+	new_text = new_text[1:]
+	remove_text("code_text.txt")
+	set_text("code_text.txt", new_text)
+	
+
 while(True):
-    error = 1
+	error = 1
 
-    text = input("protocol@watch_dog~#: ")
+	text = input(PS1)
 
-    if text in "help":
-        print("quit - выход")
-        print("add code <code number_code> - текущий код задачи.")
-        print("ls code - показать список активных задач.")
-        error = 0
+	if text in "help":
+		help()
+		error = 0
 
-    if text in "quit":
-        break
+	if text == "quit":
+		break
 
-    if text.find(code) >= 0:
-        text = text[5:]
-        code_text_list = get_text("code_text.txt").split(",")
-        for code_text in code_text_list:
-            code_num = code_text[0:3]
-            code_num2 = text[0:3]
+	if text.find(code) >= 0:
+		code_view(text)
+		error = 0
 
-            if(code_num == code_num2):
-                print(code_text)
-        error = 0
+	if text.find("add code") >= 0: 
+		add_code(text) 
+		error = 0 
+        
+	if len(text) >= 2:
+		if text[:2] == "ls":
+			ls(text[3:])
+		error = 0
+	
+	if len(text) >= 3: 
+		if text[:3] == "del":
+			del_code(text)
+			
+	raiting.raiting_shell(text)
 
-    if text.find("add code") >= 0: 
-        text = text.replace("add code", "") 
-        set_text("code_text.txt", text[1:]) 
-        print("code added complite!") 
-        error = 0 
-    if text in "ls code": 
-        code_list = get_text("code_text.txt").split(",") 
-        print(code_list)
-        error = 0
-
-    if error == 1:
-        print("comman not found!")
+	if error == 1:
+		print("comman not found!")
