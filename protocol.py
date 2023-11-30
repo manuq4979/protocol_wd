@@ -66,7 +66,6 @@ def add_code(text):
 		error = 1
 	if error == 0:
 		reward = input("Укажите награду: ")
-		print(number)
 		if not reward.isdigit():
 			print("\033[31m{}".format("ERROR: ")+"\033[37m{}".format("Допускаются только цифры!"))
 			return
@@ -133,6 +132,11 @@ while(True):
 	command_start = False
 
 	text = input(PS1)
+	
+	# костыль, чтобы приложение от пустого ввода не ложилось!
+	if text == "":
+		text = "       "
+		command_start = True
 
 	if text in "help":
 		help()
