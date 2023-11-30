@@ -128,11 +128,10 @@ def add_history_point(text):
 			fp.write(text)
 	except UnicodeEncodeError:
 		print("\033[31m{}".format("ERROR: ") + "\033[0m{}".format("Увы данные не были записаны! Снова ошибка utf-8!"))
+		if os.path.exists("history_points.txt"):
+			text2 = read_history_points()
+			text = text2+"_"+text
 		return 1
-	
-	if os.path.exists("history_points.txt"):
-		text2 = read_history_points()
-		text = text2+"_"+text
 
 
 def del_history():
