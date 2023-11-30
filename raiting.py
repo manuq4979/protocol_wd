@@ -183,8 +183,8 @@ def raiting_shell(enter, command_start):
 			point = int(point)
 			description = input("За какие заслуги? : ")
 			text = str(point)+" - "+description
-			add_history_point(text)
-				
+			if add_history_point(text) == 1:
+				return 1
 			point = point + read_rank()
 			write_rank(point)
 			print("\033[32m{}".format("Done!"))
