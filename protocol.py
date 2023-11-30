@@ -66,6 +66,9 @@ def add_code(text):
 		error = 1
 	if error == 0:
 		reward = input("Укажите награду: ")
+		if not number.isdigit():
+			print("\033[31m{}".format("ERROR: ")+"\033[37m{}".format("Допускаются только цифры!"))
+			return
 		details = input("Укажите подробности: ")
 		d = {"number" : number, "reward" : reward, "details" : details}
 		line = json.dumps(d)
