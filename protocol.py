@@ -14,25 +14,25 @@ code = ""
 code_text = ""
 
 def get_text(name_file):
-    text = ""
-    if os.path.exists(name_file):
-        with open(name_file, 'r') as fp:
-            text  = fp.read()
+	text = ""
+	if os.path.exists(name_file):
+		with open(name_file, 'r', encoding='utf-8') as fp:
+			text  = fp.read()
 
-    return text
+	return text
 
 def set_text(name_file, text):
-    text2 = None
-    if os.path.exists(name_file):
-        text2 = get_text(name_file)
-        text = text2+"_"+text
+	text2 = None
+	if os.path.exists(name_file):
+		text2 = get_text(name_file)
+		text = text2+"_"+text
 
-    with open(name_file, 'w+') as fp:
-        fp.writelines(text)
+	with open(name_file, 'w+', encoding='utf-8') as fp:
+		fp.writelines(text)
 
 
 def remove_text(name_file):
-    os.remove(name_file)
+	os.remove(name_file)
 
 
 def help():
@@ -87,22 +87,27 @@ def ls(text):
 			print("\033[33m{}".format("WARNING: ")+"\033[37m{}".format("Ещё не было созданно кодов! (См. code_text.txt)"))	
 
 def del_code(number):
-	status = input("Задание выполненно? : ")
-	if status == "Да" or status == "да":
-		status = True
-	if status == "Нет" or status == "нет":
-		status = False
-	if status == "Отмена" or status == "отмена":
-		status = -1
+	
 
 	new_dict = ""
 
 	code_text_list = get_text("code_text.txt").split("_")
+	find_code = False
 	for code_dict in code_text_list:
 		if len(code_dict) != 0:
 			code_dict = json.loads(code_dict)
 			code_num = code_dict["number"]
 			if(code_num == number[7:]):
+				find_code = True
+				
+				status = input("Задание выполненно? : ")
+				if status == "Да" or status == "да":
+					status = True
+				if status == "Нет" or status == "нет":
+					status = False
+				if status == "Отмена" or status == "отмена":
+					status = -1
+				
 				print("\033[32m{}".format("Done!"))
 				if status == -1:
 					raiting.add_history_point(code_dict["reward"]+" - "+"Добавлен ошибочно или для теста!")
@@ -116,6 +121,8 @@ def del_code(number):
 				new_dict = new_dict+"_"+json.dumps(code_dict)
 	remove_text("code_text.txt")
 	set_text("code_text.txt", new_dict)
+	if find_code == False:
+		print("\033[31m{}".format("ERROR: ")+"\033[0m{}".format("У Вас нечего удалять!"))
 	
 
 while(True):
