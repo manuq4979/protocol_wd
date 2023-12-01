@@ -88,7 +88,16 @@ def read_rank():
     
 	return int(points)
 
-def write_rank(points):
+def print_status():
+	print("\033[0m{}".format("--------------------------------------------------"))
+	rank_int = read_rank()
+	rank_array = is_rank_text(rank_int)
+	my_rank_point = rank_int
+	rank_array.append(my_rank_point)
+			
+	RANK_ART.rank_arts.print_rank_art(rank_array)
+
+def write_rank(points, status=False):
 	file = None
 	try:
 		file = open("otus.txt", "w")
@@ -97,11 +106,16 @@ def write_rank(points):
 	points = str(points)
 	file.write(points)
 	file.close()
+	
+	# Теперь будет отображать status после каждого нового добавленного поинта:
+	if status == True:
+		print_status()
+			
 
 def default_rank():
 	write_rank(1)
   
-def del_rank(points_for_del):
+def del_rank(points_for_del, status=False):
 	points = read_rank()
 	if points_for_del <= points:
 		default_rank()
@@ -109,7 +123,10 @@ def del_rank(points_for_del):
 		print("\033[32m{}".format("delite complite!"))
 	if points_for_del > points:
 		print("\033[31m{}".format("ERROR: ")+"\033[0m{}".format("Вы хотите удалить больше чем у Вас есть!"))
-
+		
+	# Теперь будет отображать status после каждого очередного удаленного поинта:
+	if status == True:
+		print_status()
 
 
 def read_history_points():
@@ -186,7 +203,7 @@ def raiting_shell(enter, command_start):
 			if add_history_point(text) == 1:
 				return 1
 			point = point + read_rank()
-			write_rank(point)
+			write_rank(point, status=True)
 			print("\033[32m{}".format("Done!"))
 			command_start = True
 			
@@ -199,12 +216,7 @@ def raiting_shell(enter, command_start):
 			print("\033[31m{}".format("ERROR:\n")+"\033[37m{}".format(traceback.format_exc())+"\nЕсли коротко, то команда была написана неверно!")
 			
 	if enter == "status":
-		rank_int = read_rank()
-		rank_array = is_rank_text(rank_int)
-		my_rank_point = rank_int
-		rank_array.append(my_rank_point)
-			
-		RANK_ART.rank_arts.print_rank_art(rank_array)
+		print_status()
 			
 		command_start = True
 		
@@ -222,7 +234,7 @@ def raiting_shell(enter, command_start):
 			point_for_del = int(enter[7:])
 			history = input("Какова причина: ")
 			add_history_point(history)
-			del_rank(point_for_del)
+			del_rank(point_for_del, status=True)
 		command_start = True
 	
 	

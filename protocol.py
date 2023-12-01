@@ -104,11 +104,11 @@ def del_code(number):
 				find_code = True
 				
 				status = input("Задание выполненно? : ")
-				if status == "Да" or status == "да":
+				if status == "Да" or status == "да" or status == "Yes" or status == "yes":
 					status = True
-				if status == "Нет" or status == "нет":
+				if status == "Нет" or status == "нет" or status == "No" or status == "no":
 					status = False
-				if status == "Отмена" or status == "отмена":
+				if status == "Отмена" or status == "отмена" or status == "Cancel" or status == "cancel":
 					status = -1
 				
 				print("\033[32m{}".format("Done!"))
@@ -116,8 +116,11 @@ def del_code(number):
 					raiting.add_history_point(code_dict["reward"]+" - "+"Добавлен ошибочно или для теста!")
 				if status == True:
 					raiting.add_history_point(code_dict["reward"]+" - "+"Задание "+code_dict["number"]+" выполненно! : "+code_dict["details"])
-					if code_dict["reward"].isdigit():
-						raiting.write_rank(int(code_dict["reward"]))
+					
+					var_my_raiting = raiting.read_rank()
+
+					var_my_raiting = var_my_raiting + int(code_dict["reward"])
+					raiting.write_rank(var_my_raiting, status=True)
 				if status == False:
 					raiting.add_history_point(code_dict["reward"]+" - "+"Задание "+code_dict["number"]+" провалено! : "+code_dict["details"])
 			else:
