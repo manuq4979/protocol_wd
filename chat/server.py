@@ -20,11 +20,14 @@ host = '127.0.0.1' #LocalHost
 port = 1123 #Choosing unreserved port
 reserv_port = 1124
 var_prompt = (	"\n"+
+		"\033[33m{}".format("HELP LIST:")+"\033[0m{}".format("")+"\n"+
+		"-------------------------------------------------------"+"\n"+
 		"@help                       - Команда сервера которая видна только отправителю.\n"+
 		"@имя_пользователя сообщение - отправить сообщение конкретному пользователю.\n"+
 		"                              Остальные участники не увидят этого сообщения.\n"+
 		"@user_list                  - запросить список пользоателей.\n"+
 		"                              Команда как и чат не рабоатет, пока что :(\n"+
+		"-------------------------------------------------------"+
 		"\n")
 
 
@@ -72,7 +75,13 @@ def commands_for_server(command, sender_name, question="None"):
 			q += m
 		answer = api_gpt.get_answer_gpt(q)
 		print("answer: "+answer.split("\n")[1])
-		personal("\n[gpt4]: "+answer.split("\n")[1]+"\n\n", sender_name)
+		
+		answer = ("\033[33m{}".format("HELP LIST:")+"\033[0m{}".format("")+"\n"+
+		          "-------------------------------------------------------"+"\n"+
+		          "\n[gpt4]: "+answer.split("\n")[1]+"\n"+
+		          "-------------------------------------------------------"+"\n")
+		
+		personal(answer, sender_name)
 		return True
 	if command == "help":
 		help_text = var_prompt
