@@ -3,12 +3,15 @@ import os
 import profile_wd
 import raiting
 import arts_ascii
+import chat.client
 import json
 import ast
+import time
 
 profile_wd.hello_user()
 
 PS1 = profile_wd.PS1
+PS3 = profile_wd.PS3
 
 code = ""
 code_text = ""
@@ -37,6 +40,7 @@ def remove_text(name_file):
 
 def help():
 	print("\n")
+	print("ssc                            - standart shell command - запускает обработчик стандартных комманд.")
 	print("quit                           - выход.")
 	print("add code <code number_code>    - текущий код задачи.")
 	print("ls code                        - показать список активных задач.")
@@ -130,6 +134,27 @@ def del_code(number):
 	if find_code == False:
 		print("\033[31m{}".format("ERROR: ")+"\033[0m{}".format("У Вас нечего удалять!"))
 	
+	
+def standart_shell_command(text):
+	if text == "ssc":
+	
+		print("\n")
+		with open("art_shell.py", "r") as fd:
+			for line in fd:
+				print(line, end="")
+				time.sleep(0.05)
+		print("\n")
+		
+		while(True):
+			if text == "exit" or text == "quit":
+				break
+			if text == "help":
+				print("Тут все стандартные команды вашего Linux!\n"
+				      "Используйте команды quit или exit для выхода обратно!\n")
+			
+			text = input(PS3)
+			os.system(text)
+			
 
 while(True):
 	command_start = False
@@ -149,6 +174,9 @@ while(True):
 	if text == "quit":
 		break
 	
+	if text == "chat":
+		chat.client.start_client()
+		command_start = True
 	
 	if text.find(text) >= 0 and text[0:3] == "code":
 		code_view(text)
@@ -169,6 +197,9 @@ while(True):
 			command_start = True
 			
 	command_start = raiting.raiting_shell(text, command_start)
+	
+	standart_shell_command(text)
+
 	
 	
 	if command_start == False:
