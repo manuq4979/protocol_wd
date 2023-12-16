@@ -15,9 +15,8 @@ import api_gpt
 import keyboard
 
 
-# Порты ниже 1024 использовать можно только из под рута!
 host = '127.0.0.1' #LocalHost
-port = 1124 #Choosing unreserved port
+port = 1124 # Порты ниже 1024 использовать можно только из под рута!
 reserv_port = 1124
 bufferSize = 1024*200
 var_prompt = (	"\n"+

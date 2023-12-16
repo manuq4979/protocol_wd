@@ -19,10 +19,13 @@ write_thread = None
 client = socket.socket()
 quit = False
 
-forwarding_link = get("https://raw.githubusercontent.com/manuq4979/protocol_wd/main/host_port").text
-forwarding_link = forwarding_link.split(":")
-host = forwarding_link[0]
-port = int(forwarding_link[1])
+
+def get_address_server():
+	global host, port
+	forwarding_link = get("https://raw.githubusercontent.com/manuq4979/protocol_wd/main/host_port").text
+	forwarding_link = forwarding_link.split(":")
+	host = forwarding_link[0]
+	port = int(forwarding_link[1])
 
 def set_name_this_client(client_name):
 	var_profile_dict = {'name': client_name}
@@ -58,9 +61,13 @@ else:
 
 def connect_client():
 	global client
+	
+	get_address_server()
+	
 	print("[INFO]: Подключение к серверу, подождите...")
 	print("[INFO]: "+"host: "+str(host) + " port: "+str(port))
 	print("[INFO]: если подключения нет больше 2-3 минут, значит сервер по указанному адресу не доступен!")
+	
 	
 	client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #socket initialization
 	try:
@@ -71,6 +78,8 @@ def connect_client():
 				client.connect((host, reserv_port))
 			except:
 				print("\033[31m{}".format("[ERROR]: ")+"\033[0m{}".format("сервер не доступен."))
+		except:
+			print("\033[31m{}".format("[ERROR]: ")+"\033[0m{}".format("скорее всего неожиданно обрубился интернет, попробуйте позже, это сработает :)"))
 	except TimeoutError:
 		print("\033[31m{}".format("[ERROR]: ")+"\033[0m{}".format("время ожидания истекло, сервер не доступен."))
 
@@ -139,6 +148,7 @@ def write():
 				#write_thread.join()
 				client.send(("[BROADCAST]: "+client_name['name']+" left!").encode(var_encoding_type))
 				client.close()
+				time.sleep(2)
 				quit = True
 				break
 		
