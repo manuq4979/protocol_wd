@@ -19,6 +19,9 @@ write_thread = None
 client = socket.socket()
 quit = False
 
+client_name = ""
+nickname = ""
+
 
 def get_address_server():
 	global host, port
@@ -47,13 +50,14 @@ def get_profile_this_client():
 	else:
 		return False
 
-client_name = get_profile_this_client()
-nickname = None
-if client_name == False:
-	nickname = input("\033[32m{}".format("Choose your ")+ "\033[34m{}".format("nickname")+"\033[0m{}".format(": "))
-	set_name_this_client(nickname)
-else:
-	nickname = client_name['name']
+def input_nickname():
+	global client_name, nickname
+	client_name = get_profile_this_client()
+	if client_name == False:
+		nickname = input("\033[32m{}".format("Choose your ")+ "\033[34m{}".format("nickname")+"\033[0m{}".format(": "))
+		set_name_this_client(nickname)
+	else:
+		nickname = client_name['name']
 	
 	
 		
@@ -164,6 +168,7 @@ def write():
 def start_client():
 	global receive_thread, write_thread
 	
+	input_nickname()
 	welcome.hello_user()
 	
 	connect_client()
