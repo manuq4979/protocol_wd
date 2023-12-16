@@ -17,16 +17,22 @@ import keyboard
 
 # Порты ниже 1024 использовать можно только из под рута!
 host = '127.0.0.1' #LocalHost
-port = 1123 #Choosing unreserved port
+port = 1124 #Choosing unreserved port
 reserv_port = 1124
+bufferSize = 1024*200
 var_prompt = (	"\n"+
 		"\033[33m{}".format("HELP LIST:")+"\033[0m{}".format("")+"\n"+
 		"-------------------------------------------------------"+"\n"+
-		"@help                       - Команда сервера которая видна только отправителю.\n"+
-		"@имя_пользователя сообщение - отправить сообщение конкретному пользователю.\n"+
-		"                              Остальные участники не увидят этого сообщения.\n"+
-		"@user_list                  - запросить список пользоателей.\n"+
-		"                              Команда как и чат не рабоатет, пока что :(\n"+
+		"@help                       - Команда сервера которая \n"+
+		"                              видна только отправителю.\n"+
+		"@имя_пользователя сообщение - отправить сообщение \n"+
+		"                              конкретному пользователю.\n"+
+		"                              Остальные участники не \n"+
+		"                              увидят этого сообщения.\n"+
+		"@user_list                  - запросить список \n"+
+		"                              пользоателей.\n"+
+		"                              Команда как и чат не \n"+
+		"                              рабоатет, пока что :(\n"+
 		"-------------------------------------------------------"+
 		"\n")
 
@@ -58,13 +64,28 @@ nicknames = []
 # Реализация метода для отправки сообщений для всех.
 def broadcast(message): #broadcast function declaration
 	for client in clients.values():
-		client.send(message)
+		try:
+			client.send(message)
+		except BrokenPipeError:
+			invert_clients = {v: k for k, v in clients.items()}
+			nickname = invert_clients[client]
+			print("\033[31m{}".format("[ERROR]: ")+"\033[0m{}".format("клиент "+nickname+" неожиданно оборвал соединение."))
+			print('[INFO]: {} left!'.format(nickname).encode(var_encoding_type))
+			
 
 # Вернет только буквы и символы, без знаков припинания и @.
 def extract_name_or_command(message):
 	table = str.maketrans("", "", string.punctuation)
 	name_or_cammand = message.translate(table)
 	return name_or_cammand
+
+def personal(message, name):
+	try:
+		client = clients[name]
+		client.send(message.encode(var_encoding_type))
+	except:
+		print("KeyError"+" personal()")
+		return "KeyError"
 
 def commands_for_server(command, sender_name, question="None"):
 	global var_prompt
@@ -78,7 +99,7 @@ def commands_for_server(command, sender_name, question="None"):
 		
 		answer = ("\033[33m{}".format("HELP LIST:")+"\033[0m{}".format("")+"\n"+
 		          "-------------------------------------------------------"+"\n"+
-		          "\n[gpt4]: "+answer.split("\n")[1]+"\n"+
+		          "\n[gpt4]: "+answer+"\n"+
 		          "-------------------------------------------------------"+"\n")
 		
 		personal(answer, sender_name)
@@ -96,13 +117,7 @@ def commands_for_server(command, sender_name, question="None"):
 		return True
 	return False
 	
-def personal(message, name):
-	try:
-		client = clients[name]
-		client.send(message.encode(var_encoding_type))
-	except:
-		print("KeyError"+" personal()")
-		return "KeyError"
+
 					
 
 def get_current_nickname(client):
@@ -121,7 +136,7 @@ def get_current_nickname(client):
 def handle(client):
 	while True:
 		try: #recieving valid messages from client
-			message = client.recv(1024)
+			message = client.recv(bufferSize)
 			lines_array = message.decode(var_encoding_type).split()
 
 			# IndexError будет если строка в массиве нет сообщение, например lines_array[1][0], это бывает когда пробел отправляешь, это коротко:
@@ -170,7 +185,7 @@ def receive(): #accepting multiple clients
 		client, address = server.accept()
 		print("[BROADCAST]: Connected with {}".format(str(address)))
 		client.send('NICKNAME'.encode(var_encoding_type))
-		nickname = client.recv(1024).decode(var_encoding_type)
+		nickname = client.recv(bufferSize).decode(var_encoding_type)
 		nicknames.append(nickname)
 		clients[nickname] = client
 		print("[BROADCAST]: Nickname is {}".format(nickname))

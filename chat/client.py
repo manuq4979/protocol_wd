@@ -9,8 +9,9 @@ import chat.welcome as welcome
 
 path_profile_client = "profile_client.json"
 host = '127.0.0.1'
-port = 1123 #Choosing unreserved port
+port = 1124 #Choosing unreserved port
 reserv_port = 1123
+bufferSize = 1024*200
 PS5 = welcome.PS5
 
 receive_thread = None
@@ -84,7 +85,7 @@ def receive():
 		if quit == True:
 			break
 		try:
-			message = client.recv(1024).decode(var_encoding_type)
+			message = client.recv(bufferSize).decode(var_encoding_type)
 			if message == 'NICKNAME':
 				client.send(nickname.encode(var_encoding_type))
 			else:
@@ -96,8 +97,11 @@ def receive():
 				
 		except: #case on wrong ip/port details
 			print("An error occured!")
-			client.send(("[BROADCAST]: "+client_name['name']+" left!").encode(var_encoding_type))
-			client.close()
+			try:
+				client.send(("[BROADCAST]: "+client_name['name']+" left!").encode(var_encoding_type))
+				client.close()
+			except:
+				print("\033[31m{}".format("[ERROR]: ")+"\033[0m{}".format("время ожидания сообщения истекло, сервер не доступен."))
 			break
 			
 def is_command(message):
@@ -138,8 +142,14 @@ def write():
 				quit = True
 				break
 		
-		client.send(message.encode(var_encoding_type))
-		print_buffer_msg(message=message)
+		try:
+			client.send(message.encode(var_encoding_type))
+			print_buffer_msg(message=message)
+		except BrokenPipeError:
+			print("\033[31m{}".format("[ERROR]: ")+"\033[0m{}".format("cервер неожиданно оборвал соединение."))
+			quit = True
+			break
+			
 
 def start_client():
 	global receive_thread, write_thread
