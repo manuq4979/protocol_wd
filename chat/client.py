@@ -10,7 +10,7 @@ import chat.welcome as welcome
 path_profile_client = "profile_client.json"
 host = '127.0.0.1'
 port = 1123 #Choosing unreserved port
-reserv_port = 1124
+reserv_port = 1123
 PS5 = welcome.PS5
 
 receive_thread = None
@@ -63,9 +63,12 @@ def connect_client():
 	
 	client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #socket initialization
 	try:
-		client.connect((host, port)) #connecting client to server
-	except ConnectionRefusedError:
-		client.connect((host, reserv_port))
+		try:
+			client.connect((host, port)) #connecting client to server
+		except ConnectionRefusedError:
+			client.connect((host, reserv_port))
+	except TimeoutError:
+		print("\033[31m{}".format("[ERROR]: ")+"\033[0m{}".format("время ожидания истекло, сервер не доступен."))
 
 var_new_line = False
 # Данные попадают в буфер и информация с сервера не мешает вводить пользователю сообщение и только после ввода, информация из чата будет видна.
