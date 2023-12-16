@@ -66,7 +66,10 @@ def connect_client():
 		try:
 			client.connect((host, port)) #connecting client to server
 		except ConnectionRefusedError:
-			client.connect((host, reserv_port))
+			try:
+				client.connect((host, reserv_port))
+			except:
+				print("\033[31m{}".format("[ERROR]: ")+"\033[0m{}".format("сервер не доступен."))
 	except TimeoutError:
 		print("\033[31m{}".format("[ERROR]: ")+"\033[0m{}".format("время ожидания истекло, сервер не доступен."))
 
