@@ -13,9 +13,12 @@ s9 = "\033[31m{}".format("#")
 s10 = "\033[37m{}".format(" ")
 PS1=s1+s2+s3+s4+s5+s6+s7+s8+s9+s10
 
+s2_1 = "\033[32m{}".format("shell")
+PS3=s1+s2_1+s3+s4+s5+s6+s7+s8+s9+s10
+
 def hello_user():
 	amblema=""
-	print("\033[32m{}".format("protocol_v1 build 3")+"\033[34m{}".format(":")+" "+"\033[37m{}".format("Mobile version")+"\n")
+	print("\033[32m{}".format("protocol_v1 build 4")+"\033[34m{}".format(":")+" "+"\033[37m{}".format("Mobile version")+"\n")
 	#print("\033[47m{}".format(" "))
 	with open("wd_asci.py", "r") as fd:
 		amblema = fd.read()
