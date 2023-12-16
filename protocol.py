@@ -40,8 +40,9 @@ def remove_text(name_file):
 
 def help():
 	print("\n")
-	print("ssc                            - standart shell command - запускает обработчик стандартных комманд.")
 	print("quit                           - выход.")
+	print("ssc                            - standart shell command - запускает обработчик стандартных комманд.")
+	print("chat                           - открывает чат с возможностью общаться с chat gpt4all falcone.")
 	print("add code <code number_code>    - текущий код задачи.")
 	print("ls code                        - показать список активных задач.")
 	print("del -c <code_number>           - вводите номер кода и тот будет удален.")

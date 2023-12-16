@@ -46,7 +46,7 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #socket initializatio
 try:
 	server.bind((host, port)) #binding host and port to socket
 except OSError:
-	server.bind((host, reserv_port))
+	server.bind((host, port))
 server.listen()
 
 clients = {}

@@ -18,10 +18,22 @@ write_thread = None
 client = socket.socket()
 quit = False
 
-forwarding_link = get("https://raw.githubusercontent.com/manuq4979/calculator/master/hostport").text
+forwarding_link = get("https://raw.githubusercontent.com/manuq4979/protocol_wd/main/host_port").text
 forwarding_link = forwarding_link.split(":")
 host = forwarding_link[0]
 port = int(forwarding_link[1])
+
+def set_name_this_client(client_name):
+	var_profile_dict = {'name': client_name}
+	with open(path_profile_client, "w+") as f:
+		if path.exists(path_profile_client) == False:
+			var_profile_dict = get_profile_this_client()
+			var_profile_dict["name"] = client_name
+			json.dump(var_profile_dict, f)
+			print(0)
+		else:
+			print(1)
+			json.dump(var_profile_dict, f)
 
 def get_profile_this_client():
 	if path.exists(path_profile_client):
@@ -41,20 +53,13 @@ else:
 	
 	
 		
-def set_name_this_client(client_name):
-	var_profile_dict = {'name': client_name}
-	with open(path_profile_client, "w+") as f:
-		if path.exists(path_profile_client) == False:
-			var_profile_dict = get_profile_this_client()
-			var_profile_dict["name"] = client_name
-			json.dump(var_profile_dict, f)
-			print(0)
-		else:
-			print(1)
-			json.dump(var_profile_dict, f)
+
 
 def connect_client():
 	global client
+	print("[INFO]: Подключение к серверу, подождите...")
+	print("[INFO]: "+"host: "+str(host) + " port: "+str(port))
+	print("[INFO]: если подключения нет больше 2-3 минут, значит сервер по указанному адресу не доступен!")
 	
 	client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #socket initialization
 	try:
@@ -78,7 +83,7 @@ def receive():
 				client.send(nickname.encode(var_encoding_type))
 			else:
 				if i == 0:
-					time.sleep(3)
+					time.sleep(2)
 					i = 1
 				#print(message)
 				buffer_messages.append(message)
@@ -112,7 +117,7 @@ def write():
 	i = 0
 	while True: #message layout\
 		if i == 0:
-			time.sleep(3)
+			time.sleep(2)
 			print_buffer_msg()
 			i = 1
 		message = '{}: {}'.format(nickname, input(PS5))
@@ -126,7 +131,6 @@ def write():
 				client.close()
 				quit = True
 				break
-				print("QUIT")
 		
 		client.send(message.encode(var_encoding_type))
 		print_buffer_msg(message=message)
