@@ -1,5 +1,5 @@
 #from fuzzywuzzy import fuzz
-import os
+import os, subprocess
 import profile_wd
 import raiting
 import arts_ascii
@@ -11,7 +11,7 @@ import time
 profile_wd.hello_user()
 
 PS1 = profile_wd.PS1
-PS3 = profile_wd.PS3
+#PS3 = profile_wd.PS3
 
 code = ""
 code_text = ""
@@ -177,11 +177,13 @@ def shell_hello_user():
 	print("\n")
 
 def standart_shell_command(text):
+	global PS3
 	if text == "ssc":
 	
 		shell_hello_user()
 		
 		while(True):
+			PS3 = profile_wd.PS3
 			
 			text = input(PS3)
 			if text == "exit" or text == "quit":
@@ -190,6 +192,12 @@ def standart_shell_command(text):
 			if text == "help":
 				print("Тут все стандартные команды вашего Linux!\n"
 				      "Используйте команды quit или exit для выхода обратно!\n")
+			
+			if text[:2] == "cd":
+				os.chdir(text[3:])
+				cwd = subprocess.check_output(["pwd"]).decode("utf-8").replace('\n', '')
+				profile_wd.set_path_PS3(cwd)
+				
 				      
 			os.system(text)
 			
