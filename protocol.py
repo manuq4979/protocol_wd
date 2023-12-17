@@ -156,6 +156,9 @@ def standart_shell_command(text):
 			text = input(PS3)
 			os.system(text)
 			
+		command_start = True
+		return command_start
+			
 
 while(True):
 	command_start = False
@@ -199,7 +202,7 @@ while(True):
 			
 	command_start = raiting.raiting_shell(text, command_start)
 	
-	standart_shell_command(text)
+	command_start = standart_shell_command(text)
 
 	
 	
