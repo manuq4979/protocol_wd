@@ -147,13 +147,15 @@ def standart_shell_command(text):
 		print("\n")
 		
 		while(True):
+			
+			text = input(PS3)
 			if text == "exit" or text == "quit":
 				break
+			
 			if text == "help":
 				print("Тут все стандартные команды вашего Linux!\n"
 				      "Используйте команды quit или exit для выхода обратно!\n")
-			
-			text = input(PS3)
+				      
 			os.system(text)
 			
 		command_start = True
