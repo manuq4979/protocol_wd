@@ -136,6 +136,7 @@ def del_code(number):
 		print("\033[31m{}".format("ERROR: ")+"\033[0m{}".format("У Вас нечего удалять!"))
 	
 
+# все эти конструкции нужны чтобы разукрасить арт и 26 строку этот код не видет и я просто её продублировал :)
 def shell_hello_user():
 	print("\n")
 	i = 0
@@ -164,6 +165,7 @@ def shell_hello_user():
 					print("\033["+str(rgb_array[i2])+"m{}".format("            ||||\n"), end="")
 				if i3 != 7:
 					print("\033["+str(rgb_array[i2])+"m{}".format(line), end="")
+					
 			else:
 				if ii == 7:
 					ii = 6
