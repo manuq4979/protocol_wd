@@ -150,7 +150,10 @@ def write():
 			if result == "@quit":
 				#receive_thread.join()
 				#write_thread.join()
-				client.send(("[BROADCAST]: "+client_name['name']+" left!").encode(var_encoding_type))
+				try:
+					client.send(("[BROADCAST]: "+client_name['name']+" left!").encode(var_encoding_type))
+				except BrokenPipeError:
+					print("\033[31m{}".format("[ERROR]: ")+"\033[0m{}".format("cервер уже оборвал соединение."))
 				client.close()
 				time.sleep(2)
 				quit = True

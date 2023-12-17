@@ -96,6 +96,9 @@ def commands_for_server(command, sender_name, question="None"):
 		answer = api_gpt.get_answer_gpt(q)
 		print("answer: "+answer.split("\n")[1])
 		
+		answer = answer.split("\n")
+		answer = ''.join(answer[1:])
+		
 		answer = ("\033[33m{}".format("HELP LIST:")+"\033[0m{}".format("")+"\n"+
 		          "-------------------------------------------------------"+"\n"+
 		          "\n[gpt4]: "+answer+"\n"+
