@@ -135,16 +135,49 @@ def del_code(number):
 	if find_code == False:
 		print("\033[31m{}".format("ERROR: ")+"\033[0m{}".format("У Вас нечего удалять!"))
 	
-	
+
+def shell_hello_user():
+	print("\n")
+	i = 0
+	i2 = 0
+	i3 = 1
+	ii = 7
+	rgb_array = [32, 33, 31, 35, 34]
+	with open("art_shell.py", "r") as fd:
+		for line in fd:
+			if i <= ii:
+				if i3 == 7:
+					f = True
+					for s in line:
+						if s == "~":
+							print("\033[34m{}".format(s), end="")
+							f = False
+						if s == "#":
+							print("\033[31m{}".format(s), end="")
+							f = False
+						if s == "S" or s == "H" or s == "E" or s == "L":
+							print("\033[0m{}".format(s), end="")
+							f = False
+						if f != False:
+							print("\033["+str(rgb_array[i2])+"m{}".format(s), end="")
+							f=True
+					print("\033["+str(rgb_array[i2])+"m{}".format("            ||||\n"), end="")
+				if i3 != 7:
+					print("\033["+str(rgb_array[i2])+"m{}".format(line), end="")
+			else:
+				if ii == 7:
+					ii = 6
+				i = 0
+				i2 += 1
+			i += 1
+			i3 += 1
+			time.sleep(0.05)
+	print("\n")
+
 def standart_shell_command(text):
 	if text == "ssc":
 	
-		print("\n")
-		with open("art_shell.py", "r") as fd:
-			for line in fd:
-				print(line, end="")
-				time.sleep(0.05)
-		print("\n")
+		shell_hello_user()
 		
 		while(True):
 			
