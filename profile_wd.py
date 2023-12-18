@@ -25,6 +25,7 @@ def set_path_PS3(cwd):
 def hello_user():
 	amblema=""
 	print("\033[32m{}".format("protocol_v1 build 4")+"\033[34m{}".format(":")+" "+"\033[37m{}".format("Mobile version")+"\n")
+	print("\033[33m{}".format("[WARNING]: ")+"\033[0m{}".format("РУССКИЙ ЯЗЫК МОЖЕТ РАБОТАТЬ НЕ КОРРЕКТНО НА МОБИЛЬНЫХ УСТРОЙСТВАХ!"))
 	#print("\033[47m{}".format(" "))
 	with open("wd_asci.py", "r") as fd:
 		amblema = fd.read()
