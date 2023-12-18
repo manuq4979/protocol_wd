@@ -5,5 +5,5 @@ def input_correction(s):
 		for ru_e in ru:
 			if e == ru_e:
 				s2 += ru_e
-	print(s2)
+	
 	return s2

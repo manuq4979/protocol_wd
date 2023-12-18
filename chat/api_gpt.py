@@ -1,3 +1,7 @@
+RU = "ru"
+EN = "en"
+SETTING_LAN = EN
+
 # Источник: https://docs.gpt4all.io/gpt4all_chat.html#server-mode
 
 # No module named openai будет выпадать если запустить код командой: sudo python3 api_gpt.py - из под sudo не запускай!
@@ -16,9 +20,15 @@ openai.api_key = "not needed for a local LLM"
 #model = "mpt-7b-chat"
 model = "gpt4all-j-v1.3-groovy"
 
+
 # Make the API request
-def get_answer_gpt(question):
-	prompt = translater_lang.ru_to_en(question)
+def get_answer_gpt(question, lang=SETTING_LAN):
+	answer = ""
+	if lang == RU:
+		prompt = translater_lang.ru_to_en(question)
+	if lang == EN:
+		prompt = question
+		
 	response = openai.Completion.create(
 	    model=model,
 	    prompt=prompt,
@@ -30,8 +40,13 @@ def get_answer_gpt(question):
 	    stream=False
 	)
 	
+	if lang == RU:
+		answer = translater_lang.en_to_ru(response["choices"][0]["text"])
+	if lang == EN:
+		answer = response["choices"][0]["text"]
+		
+	return answer
 
-	return translater_lang.en_to_ru(response["choices"][0]["text"])
 # Print the generated completion
 #while True:
 #	print(get_answer_gpt(input(">> ")))

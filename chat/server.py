@@ -91,6 +91,8 @@ def personal(message, name):
 
 def commands_for_server(command, sender_name, question="None"):
 	global var_prompt
+	
+	
 	if command == "gpt":
 		question = question[1:]
 		q = ""
@@ -106,7 +108,7 @@ def commands_for_server(command, sender_name, question="None"):
 		#answer = answer.split("\n")
 		#answer = ''.join(answer[1:])
 		
-		answer = ("\033[33m{}".format("HELP LIST:")+"\033[0m{}".format("")+"\n"+
+		answer = ("\033[33m{}".format("GPT ANSWER(LANG: "+api_gpt.SETTING_LAN+"):")+"\033[0m{}".format("")+"\n"+
 		          "-------------------------------------------------------"+"\n"+
 		          "\n[gpt4]: "+answer+"\n"+
 		          "-------------------------------------------------------"+"\n")
