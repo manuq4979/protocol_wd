@@ -111,7 +111,7 @@ def receive():
 				buffer_messages.append(message)
 				
 		except: #case on wrong ip/port details
-			print("\033[31m{}".format("[ERROR]: ")+"\033[0m{}".format("An error occured!")
+			print("\033[31m{}".format("[ERROR]: ")+"\033[0m{}".format("An error occured!"))
 			try:
 				client.send(("[BROADCAST]: "+client_name['name']+" left!").encode(var_encoding_type))
 				client.close()
