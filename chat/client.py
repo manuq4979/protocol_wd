@@ -132,7 +132,7 @@ def is_command(message):
 		return result
 	
 def print_buffer_msg(message=False):
-	"\033[33m{}".format("[WARNING]: ")+"\033[0m{}".format("ЧТОБЫ ОБНОВИТЬ СПИСОК СООБЩЕНИЙ НАЖМИТЕ ENTER!!!\n")
+	print("\033[33m{}".format("[WARNING]: ")+"\033[0m{}".format("ЧТОБЫ ОБНОВИТЬ СПИСОК СООБЩЕНИЙ НАЖМИТЕ ENTER!!!\n"))
 	print("[Список сообщений]:")
 	if message != False:
 		buffer_messages.append(message)
