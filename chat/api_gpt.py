@@ -2,6 +2,7 @@
 
 # No module named openai будет выпадать если запустить код командой: sudo python3 api_gpt.py - из под sudo не запускай!
 import openai
+import translater_lang
 
 openai.api_base = "http://localhost:4891/v1"
 #openai.api_base = "https://api.openai.com/v1"
@@ -17,7 +18,7 @@ model = "gpt4all-j-v1.3-groovy"
 
 # Make the API request
 def get_answer_gpt(question):
-	prompt = question
+	prompt = translater_lang.ru_to_en(question)
 	response = openai.Completion.create(
 	    model=model,
 	    prompt=prompt,
@@ -30,7 +31,7 @@ def get_answer_gpt(question):
 	)
 	
 
-	return response["choices"][0]["text"]
+	return translater_lang.en_to_ru(response["choices"][0]["text"])
 # Print the generated completion
 #while True:
 #	print(get_answer_gpt(input(">> ")))

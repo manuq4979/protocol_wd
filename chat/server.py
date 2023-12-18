@@ -13,6 +13,7 @@ var_encoding_type = "utf-8"
 import socket, threading, string, os #Libraries import
 import api_gpt
 import keyboard
+from RU_LANG.cyrillic_correction_text import input_correction
 
 
 host = '127.0.0.1' #LocalHost
@@ -81,10 +82,12 @@ def extract_name_or_command(message):
 def personal(message, name):
 	try:
 		client = clients[name]
+		print(message.encode(var_encoding_type))
 		client.send(message.encode(var_encoding_type))
 	except:
 		print("KeyError"+" personal()")
 		return "KeyError"
+		
 
 def commands_for_server(command, sender_name, question="None"):
 	global var_prompt
@@ -92,12 +95,16 @@ def commands_for_server(command, sender_name, question="None"):
 		question = question[1:]
 		q = ""
 		for m in question:
-			q += m
-		answer = api_gpt.get_answer_gpt(q)
-		print("answer: "+answer.split("\n")[1])
+			q += m+" "
 		
-		answer = answer.split("\n")
-		answer = ''.join(answer[1:])
+		q = input_correction(q)
+		print(q)
+		answer = api_gpt.get_answer_gpt(q)
+		
+		#print("answer: "+answer.split("\n")[1])
+		
+		#answer = answer.split("\n")
+		#answer = ''.join(answer[1:])
 		
 		answer = ("\033[33m{}".format("HELP LIST:")+"\033[0m{}".format("")+"\n"+
 		          "-------------------------------------------------------"+"\n"+
@@ -181,20 +188,24 @@ def handle(client):
 def receive(): #accepting multiple clients
 	print("linux server: "+"\033[32m{}".format("started!"))
 	print("\033[0m{}".format(""), end="")
-	
-	while True:
-		broadcast(var_prompt.encode(var_encoding_type))
-		client, address = server.accept()
-		print("[BROADCAST]: Connected with {}".format(str(address)))
-		client.send('NICKNAME'.encode(var_encoding_type))
-		nickname = client.recv(bufferSize).decode(var_encoding_type)
-		nicknames.append(nickname)
-		clients[nickname] = client
-		print("[BROADCAST]: Nickname is {}".format(nickname))
-		broadcast("[BROADCAST]: {} joined!".format(nickname).encode(var_encoding_type))
-		#client.send('Server conneted'.encode(var_encoding_type))
-		thread = threading.Thread(target=handle, args=(client,))
-		thread.start()
+	try:
+		while True:
+			broadcast(var_prompt.encode(var_encoding_type))
+			client, address = server.accept()
+			print("[BROADCAST]: Connected with {}".format(str(address)))
+			client.send('NICKNAME'.encode(var_encoding_type))
+			nickname = client.recv(bufferSize).decode(var_encoding_type)
+			nicknames.append(nickname)
+			clients[nickname] = client
+			print("[BROADCAST]: Nickname is {}".format(nickname))
+			broadcast("[BROADCAST]: {} joined!".format(nickname).encode(var_encoding_type))
+			#client.send('Server conneted'.encode(var_encoding_type))
+			thread = threading.Thread(target=handle, args=(client,))
+			thread.start()
+	except:
+		print("\033[31m{}".format("[ERROR]: ")+"\033[0m{}".format("скорее всего ожидаемое сообщение от клиента не пришло, он отключился :("))
+		print("\033[33m{}".format("[WARNING]: ")+"\033[0m{}".format("сервер снова работает :)"))
+		receive()
 		
 		
 

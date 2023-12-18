@@ -2,6 +2,7 @@ import profile_wd
 import traceback
 import os
 import RANK_ART.rank_arts
+from chat.RU_LANG.cyrillic_correction_text import input_correction
 
 PS1 = profile_wd.PS1
 
@@ -137,8 +138,12 @@ def read_history_points():
 
 	return text
 
+
+
 def add_history_point(text):
 	text2 = None
+	
+	text = input_correction(text)
 	
 	if os.path.exists("history_points.txt"):
 		text2 = read_history_points()

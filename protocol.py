@@ -7,6 +7,7 @@ import chat.client
 import json
 import ast
 import time
+from chat.RU_LANG.cyrillic_correction_text import input_correction
 
 profile_wd.hello_user()
 
@@ -59,6 +60,8 @@ def code_view(number):
 			print(code_text)
 
 def add_code(text):
+	text = input_correction(text)
+
 	error = 0
 	text = text.replace("add code", "")
 	number = text[1:]
@@ -197,9 +200,8 @@ def standart_shell_command(text):
 				os.chdir(text[3:])
 				cwd = subprocess.check_output(["pwd"]).decode("utf-8").replace('\n', '')
 				profile_wd.set_path_PS3(cwd)
-				
-				      
-			os.system(text)
+			else:      
+				os.system(text)
 			
 		command_start = True
 		return command_start
