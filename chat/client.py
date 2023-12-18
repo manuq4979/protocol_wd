@@ -6,6 +6,7 @@ from os import path
 from requests import get
 import re
 import chat.welcome as welcome
+from RU_LANG.cyrillic_correction_text import input_correction
 
 path_profile_client = "profile_client.json"
 host = '127.0.0.1'
@@ -144,6 +145,7 @@ def write():
 			print_buffer_msg()
 			i = 1
 		message = '{}: {}'.format(nickname, input(PS5))
+		message = input_correction(message)
 
 		result = is_command(message)
 		if result != False:

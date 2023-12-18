@@ -61,6 +61,7 @@ def code_view(number):
 
 def add_code(text):
 	text = input_correction(text)
+	
 
 	error = 0
 	text = text.replace("add code", "")
@@ -211,6 +212,7 @@ while(True):
 	command_start = False
 
 	text = input(PS1)
+	text = input_correction(text)
 	
 	# костыль, чтобы приложение от пустого ввода не ложилось!
 	if text == "":
