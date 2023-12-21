@@ -238,7 +238,7 @@ def raiting_shell(enter, command_start):
 		if enter[3:6].replace(' ', '') == "-p":
 			point_for_del = int(enter[7:])
 			history = input("Какова причина: ")
-			add_history_point(history)
+			add_history_point("-"+str(point_for_del)+" - "+history)
 			del_rank(point_for_del, status=True)
 		command_start = True
 	
